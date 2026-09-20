@@ -1,6 +1,5 @@
 import { useRef, type CSSProperties } from 'react'
-import { SITE } from '../config'
-import { copyText, downloadVCard, telHref } from '../lib/contact'
+import { copyText, telHref } from '../lib/contact'
 import { hueFor } from '../lib/text'
 import type { Faculty } from '../types/faculty'
 import { Avatar } from './Avatar'
@@ -39,7 +38,21 @@ export function ProfileSheet({ open, faculty, missing, onClose, onPickDepartment
   const f = faculty ?? last.current
 
   const copy = async (value: string, label: string) => {
-    toast((await copyText(value)) ? `${label} copied` : 'Couldn’t copy on this browser')
+    toast((await copyText(value)) ? `${label} copied` : 'Couldn\'t copy on this browser')
+  }
+
+  const copyAllInfo = async () => {
+    if (!f) return
+    const lines = [
+      f.name,
+      f.designation ?? '',
+      f.department ?? '',
+      f.email ? `Email: ${f.email}` : '',
+      ...f.phones.map(p => `Phone: ${p}`),
+      f.office ? `Office: ${f.office}` : '',
+      f.profileUrl ? `Profile: ${f.profileUrl}` : '',
+    ].filter(Boolean).join('\n')
+    toast((await copyText(lines)) ? 'Info copied' : 'Could not copy')
   }
 
   return (
@@ -56,7 +69,7 @@ export function ProfileSheet({ open, faculty, missing, onClose, onPickDepartment
           <h2 id="profile-title" className="sr-only">
             Profile not found
           </h2>
-          <EmptyState title="Profile not found" text="This faculty link may be outdated. Search the directory to find the person you’re looking for.">
+          <EmptyState title="Profile not found" text="This faculty link may be outdated. Search the directory to find the person you're looking for.">
             <button className="btn btn-primary" onClick={onClose}>
               Back to directory
             </button>
@@ -155,15 +168,13 @@ export function ProfileSheet({ open, faculty, missing, onClose, onPickDepartment
           <div className="sheet-foot">
             <button
               className="btn"
-              onClick={async () => toast((await copyText(window.location.origin + '/faculty/' + f.slug)) ? 'Link copied' : 'Couldn’t copy on this browser')}
+              onClick={async () => toast((await copyText(window.location.origin + '/faculty/' + f.slug)) ? 'Link copied' : 'Couldn\'t copy on this browser')}
             >
               <Icon.Link size={17} /> Copy link
             </button>
-            {(f.email || f.phones.length > 0) && (
-              <button className="btn" onClick={() => downloadVCard(f, SITE.university)}>
-                <Icon.Download size={17} /> Save contact
-              </button>
-            )}
+            <button className="btn" onClick={copyAllInfo}>
+              <Icon.Copy size={17} /> Copy info
+            </button>
           </div>
         </>
       )}
