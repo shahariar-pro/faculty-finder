@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Faculty-Finder — Find %VITE_UNIVERSITY_NAME% Faculty</title>
+    <meta name="description" content="Search %VITE_UNIVERSITY_NAME% faculty by name, department, or designation. Find emails, phone numbers and profiles in seconds — fast, free and mobile-friendly." />
+    <meta name="theme-color" content="#0D1017" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Faculty-Finder" />
+    <meta property="og:title" content="Faculty-Finder — Find %VITE_UNIVERSITY_NAME% Faculty" />
+    <meta property="og:description" content="Search faculty by name, department, or designation. Contact details one tap away." />
+    <meta name="twitter:card" content="summary" />
+    <!-- TODO after deploying: add <meta property="og:url"> and <meta property="og:image"> with your real https:// URLs -->
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Faculty-Finder",
+        "description": "Search %VITE_UNIVERSITY_NAME% faculty by name, department, or designation.",
+        "inLanguage": "en"
+      }
+    </script>
+
+    <script>
+      // Apply the saved theme before first paint so there is no flash. Light is the default.
+      try {
+        var t = localStorage.getItem('faculty-finder-theme')
+        // Default is dark; only switch to light if the user explicitly chose it
+        if (t === 'light') {
+          document.documentElement.dataset.theme = 'light'
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#F3F5F8')
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <noscript>Faculty-Finder needs JavaScript to search the faculty directory. Please enable JavaScript and reload.</noscript>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

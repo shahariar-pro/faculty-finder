@@ -1,0 +1,71 @@
+/* Design tokens. Change colours/typography here and the whole app follows. */
+:root {
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #f7f8fb;
+  --ink: #131722;
+  --ink-2: #444d5d;
+  --ink-3: #5d6776;
+  --line: #e1e5ec;
+  --line-strong: #cbd1dc;
+
+  --accent: #2b3bd6;
+  --accent-hover: #2230b8;
+  --accent-ink: #ffffff;
+  --accent-soft: #e9ecfd;
+
+  --mark: #ffe566;
+  --mark-ink: #1a1600;
+
+  --shadow-1: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-2: 0 10px 24px -12px rgb(16 24 40 / 0.22), 0 2px 6px rgb(16 24 40 / 0.06);
+  --shadow-sheet: 0 -12px 40px -8px rgb(10 14 24 / 0.28);
+  --scrim: rgb(10 14 24 / 0.5);
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 14px;
+  --header-h: 56px;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0d1017;
+  --surface: #151922;
+  --surface-2: #1b202b;
+  --ink: #eef1f6;
+  --ink-2: #b6bdcc;
+  --ink-3: #8f99ab;
+  --line: #262c39;
+  --line-strong: #363e4f;
+
+  --accent: #8f9dff;
+  --accent-hover: #a9b4ff;
+  --accent-ink: #0b0f2e;
+  --accent-soft: #232a52;
+
+  --shadow-1: none;
+  --shadow-2: 0 12px 28px -14px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.03);
+  --shadow-sheet: 0 -12px 40px -8px rgb(0 0 0 / 0.6);
+  --scrim: rgb(0 0 0 / 0.62);
+
+  color-scheme: dark;
+}
+
+/*
+ * Department colour system: every department gets a hue (--h, set inline from its name).
+ * These must be declared on the element that carries --h, so they resolve per element.
+ */
+[style*='--h'] {
+  --dot: hsl(var(--h) 62% 46%);
+  --tint: hsl(var(--h) 75% 93%);
+  --tint-ink: hsl(var(--h) 58% 26%);
+}
+:root[data-theme='dark'] [style*='--h'] {
+  --dot: hsl(var(--h) 70% 66%);
+  --tint: hsl(var(--h) 30% 22%);
+  --tint-ink: hsl(var(--h) 78% 84%);
+}
