@@ -1,4 +1,5 @@
 # Faculty-Finder
+🔗 **Live site:** [aiubfaculty.vercel.app](https://aiubfaculty.vercel.app)
 
 A fast, mobile-first faculty directory. Drop in a CSV, deploy to Vercel or Netlify, done.
 
