@@ -7,10 +7,12 @@ export interface IndexedFaculty {
   school: string
   dept: string
   des: string
+  research: string
   other: string
   nameWords: string[]
   deptWords: string[]
   desWords: string[]
+  researchWords: string[]
   deptInitials: string
   schoolInitials: string
 }
@@ -19,22 +21,24 @@ const STOP = new Set(['of', 'and', 'the', 'for', '&', 'in'])
 
 export function buildIndex(list: Faculty[]): IndexedFaculty[] {
   return list.map((f) => {
-    const name  = fold(f.name)
-    const school = fold(f.school ?? '')
-    const dept  = fold(f.department ?? '')
-    const des   = fold(f.designation ?? '')
-    const other = fold(
-      [f.email, f.office, f.type, ...f.phones, ...f.research, ...f.education, ...Object.values(f.extra)]
+    const name     = fold(f.name)
+    const school   = fold(f.school ?? '')
+    const dept     = fold(f.department ?? '')
+    const des      = fold(f.designation ?? '')
+    const research = fold(f.research.join(' '))
+    const other    = fold(
+      [f.email, f.office, f.type, ...f.phones, ...f.education, ...Object.values(f.extra)]
         .filter(Boolean).join(' '),
     )
-    const deptWords = dept.split(/[^\p{L}\p{N}]+/u).filter(Boolean)
+    const deptWords   = dept.split(/[^\p{L}\p{N}]+/u).filter(Boolean)
     const schoolWords = school.split(/[^\p{L}\p{N}]+/u).filter(Boolean)
     return {
-      f, name, school, dept, des, other,
-      nameWords: name.split(/[^\p{L}\p{N}]+/u).filter(Boolean),
+      f, name, school, dept, des, research, other,
+      nameWords:     name.split(/[^\p{L}\p{N}]+/u).filter(Boolean),
       deptWords,
-      desWords: des.split(/[^\p{L}\p{N}]+/u).filter(Boolean),
-      deptInitials: deptWords.filter((w) => !STOP.has(w)).map((w) => w[0]).join(''),
+      desWords:      des.split(/[^\p{L}\p{N}]+/u).filter(Boolean),
+      researchWords: research.split(/[^\p{L}\p{N}]+/u).filter(Boolean),
+      deptInitials:  deptWords.filter((w) => !STOP.has(w)).map((w) => w[0]).join(''),
       schoolInitials: schoolWords.filter((w) => !STOP.has(w)).map((w) => w[0]).join(''),
     }
   })
@@ -73,6 +77,7 @@ function strictTokenScore(it: IndexedFaculty, t: string): number {
   let s = fieldScore(it.nameWords, it.name, t, 100, 80, 50)
   s = Math.max(s, fieldScore(it.deptWords, it.dept, t, 34, 30, 20))
   s = Math.max(s, fieldScore(it.desWords, it.des, t, 34, 30, 20))
+  s = Math.max(s, fieldScore(it.researchWords, it.research, t, 45, 38, 28))
   s = Math.max(s, fieldScore(it.schoolInitials === t ? ['s'] : [], it.school, t, 30, 24, 14))
   if (t.length >= 2 && it.deptInitials === t) s = Math.max(s, 36)
   if (!s && it.other.includes(t)) s = 6
@@ -89,7 +94,10 @@ function fuzzyTokenScore(it: IndexedFaculty, t: string): number {
       if (d <= max) best = Math.max(best, score - d * 2)
     }
   }
-  check(it.nameWords, 24); check(it.deptWords, 12); check(it.desWords, 12)
+  check(it.nameWords, 24)
+  check(it.deptWords, 12)
+  check(it.desWords, 12)
+  check(it.researchWords, 18)
   return best
 }
 
@@ -113,6 +121,7 @@ export function searchIndex(index: IndexedFaculty[], tokens: string[]): SearchRe
       if (!ok) continue
       if (tokens.length > 1 && it.name.includes(phrase)) total += 40
       if (it.name.startsWith(phrase)) total += 30
+      if (tokens.length > 1 && it.research.includes(phrase)) total += 20
       scored.push({ f: it.f, score: total })
     }
     scored.sort((a, b) => b.score - a.score)
@@ -173,10 +182,10 @@ export function buildFacets(all: Faculty[], searched: Faculty[], filters: Filter
     return arr
   }
   return {
-    schools: options('schools', (f) => f.school, false),
-    departments: options('departments', (f) => f.department, false),
+    schools:      options('schools',      (f) => f.school,      false),
+    departments:  options('departments',  (f) => f.department,  false),
     designations: options('designations', (f) => f.designation, true),
-    types: options('types', (f) => f.type, true),
+    types:        options('types',        (f) => f.type,        true),
   }
 }
 
