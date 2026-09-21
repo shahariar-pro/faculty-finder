@@ -149,7 +149,7 @@ export function Directory({ data, retry, state, setState, route }: Props) {
     <>
       <section className="wrap hero">
         <h1>Find your faculty. Fast.</h1>
-        <p>Search {SITE.university} faculty by name, department, or designation.</p>
+        <p>Search {SITE.university} faculty by name, department, designation, or research interest.</p>
       </section>
 
       <div ref={sentinelRef} className="sentinel" aria-hidden="true" />
@@ -181,7 +181,7 @@ export function Directory({ data, retry, state, setState, route }: Props) {
                   else inputRef.current?.blur()
                 }
               }}
-              placeholder={wide ? 'Search faculty by name, department, or designation...' : 'Name, dept, or designation'}
+              placeholder={wide ? 'Search by name, department, designation, or research interest...' : 'Name, dept, or research interest'}
               autoComplete="off"
               autoCapitalize="none"
               autoCorrect="off"
